@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using static app2.Simple_calc_UI;
 
@@ -38,13 +31,24 @@ namespace app2
         public static double Res(int a, int b, int d,int p)
         {
             double res;
-            if (p == 1) 
+            if (d > 0)
+            {
+                if (p == 1)
+                {
+                    res = (Convert.ToDouble(-b) + Math.Sqrt(d)) / Convert.ToDouble(2 * a);
+                }
+                else if (p == 2)
+                {
+                    res = (Convert.ToDouble(-b) - Math.Sqrt(d)) / Convert.ToDouble(2 * a);
+                }
+                else
+                {
+                    res = 0;
+                }
+            }
+            else if (d == 0)
             {
                 res = (Convert.ToDouble(-b) + Math.Sqrt(d)) / Convert.ToDouble(2 * a);
-            }
-            else if (p == 2)
-            {
-                res = (Convert.ToDouble(-b) - Math.Sqrt(d)) / Convert.ToDouble(2 * a);
             }
             else
             {
@@ -89,8 +93,16 @@ namespace app2
         private void textBox7_TextChanged(object sender, EventArgs e)
         {
             string st1 = textBox7.Text;
-            num_b = Convert.ToInt32(Vvod_UI(st1));
-            StrUr(num_a, num_b, num_c);
+            if (st1 == null)
+            {
+                num_b = Convert.ToInt32(Vvod_UI(st1));
+                StrUr(num_a, num_b, num_c);
+            }
+            else
+            {
+                textBox7.Text = "0";
+                num_b = 0;
+            }
         }
 
         private void textBox6_TextChanged(object sender, EventArgs e)
@@ -103,11 +115,31 @@ namespace app2
         private void button1_Click(object sender, EventArgs e)
         {
             int d = Disc(num_a,num_b,num_c);
-            textBox3.Text = Convert.ToString(d);
-            double x1 = Res(num_a, num_b, d, 1);
-            textBox1.Text = Convert.ToString(x1);
-            double x2 = Res(num_a, num_b, d, 2);
-            textBox2.Text = Convert.ToString(x2);
+            if (d > 0)
+            {
+                textBox3.Text = Convert.ToString(d);
+                double x1 = Res(num_a, num_b, d, 1);
+                textBox1.Text = Convert.ToString(x1);
+                double x2 = Res(num_a, num_b, d, 2);
+                textBox2.Text = Convert.ToString(x2);
+            }
+            else if (d == 0)
+            {
+                double x1 = Res(num_a, num_b, d, 1);
+                textBox3.Text = Convert.ToString(d);
+                textBox1.Text = Convert.ToString(x1);
+                textBox2.Text = Convert.ToString(x1);
+                MessageBox.Show("Дискриминант равен 0, корни x1 и x2 равны ");
+
+            }
+            else
+            {
+                double x1 = Res(num_a, num_b, d, 1);
+                textBox3.Text = Convert.ToString(d);
+                textBox1.Text = "Нет действительного корня";
+                textBox2.Text = "Нет действительного корня";
+                MessageBox.Show("Дискриминант меньше 0, нет действительных корней");
+            }
         }
 
         private void textBox3_TextChanged(object sender, EventArgs e)
